@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S Poll Bot Admin Panel</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;padding:20px;
+ background:#080d19;color:#fff;
+ font-family:Arial,sans-serif
+}
+.container{max-width:950px;margin:35px auto}
+.card{
+ background:#121c30;padding:22px;
+ border:1px solid #263653;
+ border-radius:15px;margin-bottom:20px
+}
+h1,h2{color:#52d6ff}
+input,textarea,button{
+ width:100%;padding:13px;margin:8px 0;
+ border-radius:8px;border:1px solid #344663;
+ background:#0b1425;color:white
+}
+button{
+ background:#087fe5;border:0;
+ font-weight:bold;cursor:pointer
+}
+button:hover{background:#06a5d9}
+a{color:#52d6ff;text-decoration:none}
+.nav{display:flex;gap:15px;flex-wrap:wrap;margin-bottom:20px}
+.nav a{background:#192943;padding:12px;border-radius:8px}
+.stat{display:inline-block;background:#192943;padding:18px;border-radius:10px;margin:5px}
+.error{color:#ff6868}
+.success{color:#51e6a1}
+@media(max-width:650px){
+ .container{margin:10px auto}
+ .card{padding:15px}
+ .nav{gap:8px}
+ .stat{display:block}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+{% if page == 'login' %}
+<div class="card">
+<h1>👑 S POLL BOT</h1>
+<h2>ADMIN LOGIN</h2>
+<form method="POST" action="/login">
+<input type="text" name="username" placeholder="Admin Username" required>
+<input type="password" name="password" placeholder="Admin Password" required>
+<button type="submit">LOGIN</button>
+</form>
+</div>
+
+{% else %}
+<h1>👑 S POLL BOT</h1>
+<p>Premium Admin Dashboard</p>
+
+<div class="nav">
+<a href="/admin">Dashboard</a>
+<a href="/users">Users</a>
+<a href="/broadcast">Broadcast</a>
+<a href="/logout">Logout</a>
+</div>
+
+{% if page == 'dashboard' %}
+<div class="card">
+<h2>Dashboard</h2>
+<div class="stat">Total Users: {{ total|default(0) }}</div>
+<div class="stat">Published Polls: {{ published|default(0) }}</div>
+</div>
+<div class="card">
+<h2>Poll History</h2>
+{% for poll in polls|default([]) %}
+<p>{{ poll }}</p>
+{% else %}
+<p>No polls found.</p>
+{% endfor %}
+</div>
+
+{% elif page == 'users' %}
+<div class="card">
+<h2>Users</h2>
+{% for user in users|default([]) %}
+<p>{{ user }}</p>
+{% else %}
+<p>No users found.</p>
+{% endfor %}
+</div>
+
+{% elif page == 'broadcast' %}
+<div class="card">
+<h2>Send Broadcast</h2>
+<form method="POST">
+<textarea name="message" placeholder="Write your message..." required></textarea>
+<button type="submit">SEND MESSAGE</button>
+</form>
+</div>
+{% endif %}
+
+{% endif %}
+</div>
+</body>
+</html>
